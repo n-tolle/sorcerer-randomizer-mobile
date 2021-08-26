@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Characters from './screens/Characters';
@@ -43,19 +43,26 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sorcerer Randomizer</Text>
+      {/* <TouchableOpacity onPress={() => navigation.navigate('Characters')}>
+        <Text style={styles.text}>Choose Characters</Text>
+      </TouchableOpacity> */}
       <Button
+        color="#555"
         title="Choose Characters"
         onPress={() => navigation.navigate('Characters')}
       />
       <Button
+        color="#555"
         title="Choose Lineages"
         onPress={() => navigation.navigate('Lineages')}
       />
       <Button
+        color="#555"
         title="Choose Domains"
         onPress={() => navigation.navigate('Domains')}
       />
       <Button
+        color="#555"
         title="Choose Boards"
         onPress={() => navigation.navigate('Boards')}
       />
@@ -113,6 +120,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
+    color: '#c02',
+  },
+  button: {
+    backgroundColor: '#000',
     color: '#c02',
   },
 });
