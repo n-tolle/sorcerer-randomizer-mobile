@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import Item from '../components/Item';
 
 const CHARACTERS = [
@@ -19,7 +19,31 @@ const CHARACTERS = [
   { name: 'Nicodemus' },
 ];
 
-const Characters = () => {
+const Characters = ({ navigation }) => {
+  const [selectedCharacters, setSelectedCharacters] = useState([]);
+
+  const handleValueChange = useCallback((value, character) => {
+    if (value) {
+      setSelectedCharacters((characters) => [...characters, character]);
+    } else {
+      setSelectedCharacters((characters) =>
+        characters.filter((selected) => selected.name !== character.name)
+      );
+    }
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (selectedCharacters.length >= 2) {
+      navigation.navigate('Home', {
+        characters: selectedCharacters,
+      });
+    } else {
+      Alert.alert('Missing Data', 'Please select at least 2 characters.', [
+        { text: 'OK', onPress: () => console.log('OK') },
+      ]);
+    }
+  }, [selectedCharacters]);
+
   return (
     <View style={styles.container}>
       <Text>Characters to include</Text>
@@ -27,8 +51,11 @@ const Characters = () => {
         data={CHARACTERS}
         keyExtractor={(item) => item.name}
         renderItem={({ item, index }) => {
-          return <Item name={item.name} />;
+          return (
+            <Item name={item.name} handleValueChange={handleValueChange} />
+          );
         }}
+        ListFooterComponent={<Button title={'Submit'} onPress={handleSubmit} />}
       />
     </View>
   );
