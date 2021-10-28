@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Characters from './screens/Characters';
@@ -39,13 +39,20 @@ const Stack = createStackNavigator();
 //   );
 // };
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  let characters = route.params !== undefined ? route.params.characters : null;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sorcerer Randomizer</Text>
-      {/* <TouchableOpacity onPress={() => navigation.navigate('Characters')}>
-        <Text style={styles.text}>Choose Characters</Text>
-      </TouchableOpacity> */}
+      {characters === undefined ? null : (
+        <FlatList
+          data={characters}
+          keyExtractor={(item) => item.key}
+          renderItem={({ item, index }) => {
+            return <Text style={styles.text}>{item.name}</Text>;
+          }}
+        />
+      )}
       <Button
         color="#555"
         title="Choose Characters"

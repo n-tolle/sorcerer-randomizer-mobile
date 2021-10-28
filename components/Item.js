@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
-const Item = ({ name }) => {
+const Item = ({ item, handleValueChange }) => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => {
+    handleValueChange(!isEnabled, item);
+    setIsEnabled((previousState) => !previousState);
+  };
   return (
     <View>
-      <Text style={styles.text}>{name}</Text>
+      <Text style={styles.text}>{item.name}</Text>
       <Switch
         trackColor={{ false: '#767676', true: '#c02' }}
         thumbColor={isEnabled ? '#000' : 'fff'}
