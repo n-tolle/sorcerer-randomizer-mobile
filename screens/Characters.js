@@ -3,20 +3,20 @@ import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import Item from '../components/Item';
 
 const CHARACTERS = [
-  { name: 'Ariapses' },
-  { name: 'Tegu' },
-  { name: 'Miselda' },
-  { name: 'Zevrane' },
-  { name: 'Virgiliu' },
-  { name: 'Seth' },
-  { name: 'Jaleesa' },
-  { name: 'Raganhar' },
-  { name: 'Thenoch' },
-  { name: 'Wachiwi' },
-  { name: 'Sigismund' },
-  { name: 'Tatsu' },
-  { name: 'Merlin' },
-  { name: 'Nicodemus' },
+  { name: 'Ariapses', key: 'ariapses' },
+  { name: 'Tegu', key: 'tegu' },
+  { name: 'Miselda', key: 'miselda' },
+  { name: 'Zevrane', key: 'zevrane' },
+  { name: 'Virgiliu', key: 'virgiliu' },
+  { name: 'Seth', key: 'seth' },
+  { name: 'Jaleesa', key: 'jaleesa' },
+  { name: 'Raganhar', key: 'raganhar' },
+  { name: 'Thenoch', key: 'thenoch' },
+  { name: 'Wachiwi', key: 'wachiwi' },
+  { name: 'Sigismund', key: 'sigismund' },
+  { name: 'Tatsu', key: 'tatsu' },
+  { name: 'Merlin', key: 'merlin' },
+  { name: 'Nicodemus', key: 'nicodemus' },
 ];
 
 const Characters = ({ navigation }) => {
@@ -26,9 +26,12 @@ const Characters = ({ navigation }) => {
     if (value) {
       setSelectedCharacters((characters) => [...characters, character]);
     } else {
-      setSelectedCharacters((characters) =>
-        characters.filter((selected) => selected.name !== character.name)
-      );
+      setSelectedCharacters((characters) => {
+        characters = characters.filter(
+          (selected) => selected.name !== character.name
+        );
+        return characters;
+      });
     }
   }, []);
 
@@ -49,11 +52,9 @@ const Characters = ({ navigation }) => {
       <Text>Characters to include</Text>
       <FlatList
         data={CHARACTERS}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.key}
         renderItem={({ item, index }) => {
-          return (
-            <Item name={item.name} handleValueChange={handleValueChange} />
-          );
+          return <Item item={item} handleValueChange={handleValueChange} />;
         }}
         ListFooterComponent={<Button title={'Submit'} onPress={handleSubmit} />}
       />

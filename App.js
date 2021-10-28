@@ -39,19 +39,20 @@ const Stack = createStackNavigator();
 //   );
 // };
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  let characters = route.params !== undefined ? route.params.characters : null;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sorcerer Randomizer</Text>
-      {/* {characters === undefined ? null : (
+      {characters === undefined ? null : (
         <FlatList
           data={characters}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.key}
           renderItem={({ item, index }) => {
             return <Text style={styles.text}>{item.name}</Text>;
           }}
         />
-      )} */}
+      )}
       <Button
         color="#555"
         title="Choose Characters"
