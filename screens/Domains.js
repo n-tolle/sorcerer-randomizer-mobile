@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import Item from '../components/Item';
 
 const DOMAINS = [
@@ -17,7 +17,38 @@ const DOMAINS = [
   { name: 'Forlorn Opera House', key: 'forlorn-opera-house' },
 ];
 
-const Domains = () => {
+const Domains = ({ navigation, route }) => {
+  const [selectedDomains, setSelectedDomains] = useState([]);
+
+  const handleValueChange = useCallback((value, domain) => {
+    if (value) {
+      setSelectedDomains((domains) => [...domains, domain]);
+    } else {
+      setSelectedDomains((domains) => {
+        domains = domains.filter((selected) => selected.name !== domain.name);
+        return domains;
+      });
+    }
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (selectedDomains.length >= 2) {
+      let updated = route.params.current;
+      if (updated === undefined) {
+        navigation.navigate('Home', {
+          domains: selectedDomains,
+        });
+      } else {
+        updated.domains = selectedDomains;
+        navigation.navigate('Home', { current: updated });
+      }
+    } else {
+      Alert.alert('Missing Data', 'Please select at least 2 characters.', [
+        { text: 'OK', onPress: () => console.log('OK') },
+      ]);
+    }
+  }, [selectedDomains]);
+
   return (
     <View style={styles.container}>
       <Text>Domains to include</Text>
@@ -25,8 +56,9 @@ const Domains = () => {
         data={DOMAINS}
         keyExtractor={(item) => item.key}
         renderItem={({ item, index }) => {
-          return <Item name={item.name} />;
+          return <Item item={item} handleValueChange={handleValueChange} />;
         }}
+        ListFooterComponent={<Button title={'Submit'} onPress={handleSubmit} />}
       />
     </View>
   );

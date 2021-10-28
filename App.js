@@ -40,13 +40,24 @@ const Stack = createStackNavigator();
 // };
 
 const HomeScreen = ({ navigation, route }) => {
-  let characters = route.params !== undefined ? route.params.characters : null;
+  let current = route.params !== undefined ? route.params.current : undefined;
+  console.log(current);
+  let characters =
+    route.params !== undefined ? route.params.characters : undefined;
+  let lineages = route.params !== undefined ? route.params.lineages : undefined;
+  let domains = route.params !== undefined ? route.params.domains : undefined;
+  let boards = route.params !== undefined ? route.params.boards : undefined;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Sorcerer Randomizer</Text>
+      <Button
+        color="#555"
+        title="Choose Characters"
+        onPress={() => navigation.navigate('Characters', { current: current })}
+      />
       {characters === undefined ? null : (
         <FlatList
-          data={characters}
+          data={current.characters}
           keyExtractor={(item) => item.key}
           renderItem={({ item, index }) => {
             return <Text style={styles.text}>{item.name}</Text>;
@@ -55,24 +66,46 @@ const HomeScreen = ({ navigation, route }) => {
       )}
       <Button
         color="#555"
-        title="Choose Characters"
-        onPress={() => navigation.navigate('Characters')}
-      />
-      <Button
-        color="#555"
         title="Choose Lineages"
-        onPress={() => navigation.navigate('Lineages')}
+        onPress={() => navigation.navigate('Lineages', { current: current })}
       />
+      {lineages === undefined ? null : (
+        <FlatList
+          data={lineages}
+          keyExtractor={(item) => item.key}
+          renderItem={({ item, index }) => {
+            return <Text style={styles.text}>{item.name}</Text>;
+          }}
+        />
+      )}
       <Button
         color="#555"
         title="Choose Domains"
-        onPress={() => navigation.navigate('Domains')}
+        onPress={() => navigation.navigate('Domains', { current: current })}
       />
+      {domains === undefined ? null : (
+        <FlatList
+          data={domains}
+          keyExtractor={(item) => item.key}
+          renderItem={({ item, index }) => {
+            return <Text style={styles.text}>{item.name}</Text>;
+          }}
+        />
+      )}
       <Button
         color="#555"
         title="Choose Boards"
-        onPress={() => navigation.navigate('Boards')}
+        onPress={() => navigation.navigate('Boards', { current: current })}
       />
+      {boards === undefined ? null : (
+        <FlatList
+          data={boards}
+          keyExtractor={(item) => item.key}
+          renderItem={({ item, index }) => {
+            return <Text style={styles.text}>{item.name}</Text>;
+          }}
+        />
+      )}
     </View>
   );
 };
