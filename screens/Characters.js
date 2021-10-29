@@ -19,7 +19,7 @@ const CHARACTERS = [
   { name: 'Nicodemus', key: 'nicodemus' },
 ];
 
-const Characters = ({ navigation }) => {
+const Characters = ({ navigation, route }) => {
   const [selectedCharacters, setSelectedCharacters] = useState([]);
 
   const handleValueChange = useCallback((value, character) => {
@@ -37,9 +37,15 @@ const Characters = ({ navigation }) => {
 
   const handleSubmit = useCallback(() => {
     if (selectedCharacters.length >= 2) {
-      navigation.navigate('Home', {
-        characters: selectedCharacters,
-      });
+      let updated = route.params.current;
+      if (updated === undefined) {
+        navigation.navigate('Home', {
+          current: { characters: selectedCharacters },
+        });
+      } else {
+        updated.characters = selectedCharacters;
+        navigation.navigate('Home', { current: updated });
+      }
     } else {
       Alert.alert('Missing Data', 'Please select at least 2 characters.', [
         { text: 'OK', onPress: () => console.log('OK') },

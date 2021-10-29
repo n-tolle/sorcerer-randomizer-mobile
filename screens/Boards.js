@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import Item from '../components/Item';
 
 const BOARDS = [
@@ -12,7 +12,38 @@ const BOARDS = [
   { name: 'Giza ~ Necropolis', key: 'giza-necropolis' },
 ];
 
-const Boards = () => {
+const Boards = ({ navigation, route }) => {
+  const [selectedBoards, setSelectedBoards] = useState([]);
+
+  const handleValueChange = useCallback((value, board) => {
+    if (value) {
+      setSelectedBoards((boards) => [...boards, board]);
+    } else {
+      setSelectedBoards((boards) => {
+        boards = boards.filter((selected) => selected.name !== board.name);
+        return boards;
+      });
+    }
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (selectedBoards.length >= 3) {
+      let updated = route.params.current;
+      if (updated === undefined) {
+        navigation.navigate('Home', {
+          boards: selectedBoards,
+        });
+      } else {
+        updated.boards = selectedBoards;
+        navigation.navigate('Home', { current: updated });
+      }
+    } else {
+      Alert.alert('Missing Data', 'Please select at least 2 characters.', [
+        { text: 'OK', onPress: () => console.log('OK') },
+      ]);
+    }
+  }, [selectedBoards]);
+
   return (
     <View style={styles.container}>
       <Text>Boards to include</Text>
@@ -20,8 +51,9 @@ const Boards = () => {
         data={BOARDS}
         keyExtractor={(item) => item.key}
         renderItem={({ item, index }) => {
-          return <Item name={item.name} />;
+          return <Item item={item} handleValueChange={handleValueChange} />;
         }}
+        ListFooterComponent={<Button title={'Submit'} onPress={handleSubmit} />}
       />
     </View>
   );
