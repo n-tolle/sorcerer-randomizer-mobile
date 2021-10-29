@@ -38,7 +38,7 @@ const Boards = ({ navigation, route }) => {
         navigation.navigate('Home', { current: updated });
       }
     } else {
-      Alert.alert('Missing Data', 'Please select at least 2 characters.', [
+      Alert.alert('Missing Data', 'Please select at least 3 boards.', [
         { text: 'OK', onPress: () => console.log('OK') },
       ]);
     }
