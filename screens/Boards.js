@@ -27,7 +27,7 @@ const Boards = ({ navigation, route }) => {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (selectedBoards.length >= 2) {
+    if (selectedBoards.length >= 3) {
       let updated = route.params.current;
       if (updated === undefined) {
         navigation.navigate('Home', {
